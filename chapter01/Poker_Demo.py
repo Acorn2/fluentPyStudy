@@ -17,12 +17,11 @@ from itertools import groupby
 
 Card = collections.namedtuple('Card', ['rank', 'suit'])
 
-
 class Poker(MutableSequence):
     # 扑克牌的相关定义
     ranks = [str(n) for n in range(2, 11)] + list('JQKA')
-    suits = 'spades diamonds clubs hearts'.split()  # 黑桃，方块，梅花，红桃
-    suit_values = dict(spades=3, hearts=2, diamonds=1, clubs=0)
+    suits = 'spades hearts diamonds clubs'.split()  # 黑桃，红桃，方块，梅花
+    suit_values = dict(spades=3, hearts=2, diamonds=1, clubs=0)#黑桃最大，红桃次之，方块再次之，梅花最小
 
     def __init__(self):
         self._cards = [Card(rank, suit) for rank in self.ranks
@@ -44,19 +43,7 @@ class Poker(MutableSequence):
         self._cards[position] = value
 
 
-def spades_high(card):
-    '''
-    按照点数判定扑克牌的大小
-    :param card:扑克牌卡片
-    :return:
-    '''
-    rank_value = Poker.ranks.index(card.rank)
-    suit_values = Poker.suit_values
-    return rank_value * len(suit_values) + suit_values[card.suit]
-
-
 Own_Poker = collections.namedtuple('Own_Poker', ['id', 'rank', 'suit', 'score'])
-
 
 class Player():
     '''
@@ -66,8 +53,8 @@ class Player():
 
     def __init__(self, id, poker):
         self.id = id
-        self.poker = poker
-        self.pokers = []
+        self.poker = poker   #一副扑克牌
+        self.pokers = []#玩家手中的牌
         self.type = 0  # 每个人初始都假定为三张毫无关系的牌，也就是扑克牌赢法中的“单张”
 
     def set_card_score(self, card):
@@ -292,6 +279,7 @@ if __name__ == '__main__':
     # print()
 
     # 玩家1与玩家2进行比牌，决出胜负
+
     ffwinner = Winner(player1, player2)
     winner = ffwinner.get_winner()
     if winner:
